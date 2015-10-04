@@ -6,6 +6,12 @@ $(document).ready(function () {
         postNewTask();
     });
 
+    $('#modalEditButton').click(function () {
+        var id = $('#editID').val();
+        var task = $('#editTask').val();
+        editTask(id,task);
+        closeModal();
+    });
 });
 
 
@@ -38,6 +44,7 @@ var postNewTask = function () {
         });
 };
 
+var edit
 
 var refreshTasks = function (data) {
     var tr = $('table').find('tbody');
@@ -66,21 +73,38 @@ var refreshTasks = function (data) {
     $('.editButton').click(function() {
         var taskID = $(this).attr('data-id');
         var task = $(this).attr('data-task');
-        alert(taskID +" : " + task);
         openModal(taskID, task);
     });
 };
 
+var editTask = function(id,task) {
+    $.ajax({
+        url: 'http://localhost:5000/tasks/' + id,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({task: task}),
+    })
+        .done(function (data) {
+            getAllTasks();
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert("cannot post : " + textStatus + "  " + jqXHR)
+        });
+}
 
 var openModal = function(taskID, task) {
 
     var modal = $('#editModal').modal();
 
-    modal.find('p').text(task);
-    modal.attr('task', task);
+    modal.find('#editID').val(taskID);
+    modal.find('#editTask').val(task)
     modal.show();
 
+}
 
+var closeModal = function() {
+
+    var modal = $('#editModal').modal('toggle');
 
 }
 
