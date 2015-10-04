@@ -38,14 +38,14 @@ def create_task(task_id):
 @app.route('/tasks', methods = ['GET'])
 def get_tasks():
     return jsonify( { 'tasks': tasks } )
-
+	
 @app.route('/tasks/<int:task_id>', methods = ['GET'])
 def get_task(task_id):
     task = filter(lambda t: t['id'] == task_id, tasks)
     if len(task) == 0:
         abort(404)
     return jsonify( { 'task': task[0] } )
-
+	
 @app.route('/tasks/<int:task_id>', methods = ['PUT'])
 def update_task(task_id):
     task = filter(lambda t: t['id'] == task_id, tasks)
@@ -65,4 +65,4 @@ def delete_task(task_id):
     return jsonify( { 'tasks': tasks } )
 
 if __name__ == '__main__':
-    app.run(debug = false)
+    app.run(debug = True)
