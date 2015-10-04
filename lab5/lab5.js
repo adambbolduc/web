@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     getAllTasks();
 
-    $('#add').click(function() {
+    $('#add').click(function () {
         postNewTask();
     });
 
@@ -23,18 +23,18 @@ var getAllTasks = function () {
         });
 };
 
-var postNewTask = function() {
+var postNewTask = function () {
     $.ajax({
-        url: 'http://localhost:5000/tasks/'+$('#inputID').val(),
+        url: 'http://localhost:5000/tasks/' + $('#inputID').val(),
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({task: $("#task").val()}),
     })
-        .done(function(data){
+        .done(function (data) {
             getAllTasks();
         })
-        .fail(function(jqXHR, textStatus) {
-           alert("cannot post : " + textStatus + "  " + jqXHR)
+        .fail(function (jqXHR, textStatus) {
+            alert("cannot post : " + textStatus + "  " + jqXHR)
         });
 };
 
@@ -50,21 +50,43 @@ var refreshTasks = function (data) {
                 .append($('<td>')
                     .text((data.tasks)[i].task)
             )
-                .append($('<input>')
-                    .attr('type', "submit")
-                    .attr('class', "btn btn-warning col-xs-6")
-                    .attr('value', "Edit")
-
+                .append($('<button>')
+                    .attr('class', "btn btn-warning col-xs-6 editButton")
+                    .attr('data-id',(data.tasks)[i].id)
+                    .attr('data-task', (data.tasks)[i].task)
+                    .text("Edit")
             )
-                .append($('<input>')
-                    .attr('type', "submit")
+                .append($('<button>')
                     .attr('class', "btn btn-danger col-xs-6")
-                    .attr('value', "Delete")
-
+                    .text("Delete")
             )
         )
     }
+
+    $('.editButton').click(function() {
+        var taskID = $(this).attr('data-id');
+        var task = $(this).attr('data-task');
+        alert(taskID +" : " + task);
+        openModal(taskID, task);
+    });
 };
+
+
+var openModal = function(taskID, task) {
+
+    var modal = $('#editModal').modal();
+
+    modal.find('p').text(task);
+    modal.attr('task', task);
+    modal.show();
+
+
+
+}
+
+
+
+
 
 
 
