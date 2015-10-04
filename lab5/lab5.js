@@ -12,6 +12,7 @@ $(document).ready(function () {
         editTask(id,task);
         closeModal();
     });
+
 });
 
 
@@ -64,7 +65,9 @@ var refreshTasks = function (data) {
                     .text("Edit")
             )
                 .append($('<button>')
-                    .attr('class', "btn btn-danger col-xs-6")
+                    .attr('class', "btn btn-danger col-xs-6 deleteButton")
+                    .attr('data-id',(data.tasks)[i].id)
+                    .attr('data-task', (data.tasks)[i].task)
                     .text("Delete")
             )
         )
@@ -74,6 +77,12 @@ var refreshTasks = function (data) {
         var taskID = $(this).attr('data-id');
         var task = $(this).attr('data-task');
         openModal(taskID, task);
+    });
+
+    $('.deleteButton').click(function() {
+        var taskID = $(this).attr('data-id');
+        var task = $(this).attr('data-task');
+        deleteTask(taskID, task);
     });
 };
 
@@ -85,12 +94,25 @@ var editTask = function(id,task) {
         data: JSON.stringify({task: task}),
     })
         .done(function (data) {
-            getAllTasks();
+            refreshTasks(data);
         })
         .fail(function (jqXHR, textStatus) {
-            alert("cannot post : " + textStatus + "  " + jqXHR)
+            alert("cannot edit : " + textStatus + "  " + jqXHR)
         });
-}
+};
+
+var deleteTask = function(taskID, task) {
+    $.ajax({
+        url: 'http://localhost:5000/tasks/' + taskID,
+        type: 'DELETE'
+    })
+        .done(function (data) {
+            refreshTasks(data);
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert("cannot delete : " + textStatus + "  " + jqXHR)
+        });
+};
 
 var openModal = function(taskID, task) {
 
