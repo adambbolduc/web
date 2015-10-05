@@ -59,13 +59,18 @@ var refreshTasks = function (data) {
                     .text((data.tasks)[i].task)
             )
                 .append($('<button>')
-                    .attr('class', "btn btn-warning col-xs-6 editButton")
+                    .attr('class', "btn btn-primary col-xs-4 getTaskButton")
+                    .attr('data-id',(data.tasks)[i].id)
+                    .text("Show")
+            )
+                .append($('<button>')
+                    .attr('class', "btn btn-warning col-xs-4 editButton")
                     .attr('data-id',(data.tasks)[i].id)
                     .attr('data-task', (data.tasks)[i].task)
                     .text("Edit")
             )
                 .append($('<button>')
-                    .attr('class', "btn btn-danger col-xs-6 deleteButton")
+                    .attr('class', "btn btn-danger col-xs-4 deleteButton")
                     .attr('data-id',(data.tasks)[i].id)
                     .attr('data-task', (data.tasks)[i].task)
                     .text("Delete")
@@ -83,6 +88,11 @@ var refreshTasks = function (data) {
         var taskID = $(this).attr('data-id');
         var task = $(this).attr('data-task');
         deleteTask(taskID, task);
+    });
+
+    $('.getTaskButton').click(function() {
+        var taskID = $(this).attr('data-id');
+        getTask(taskID);
     });
 };
 
@@ -114,6 +124,25 @@ var deleteTask = function(taskID, task) {
         });
 };
 
+var getTask = function(taskID) {
+    $.ajax({
+        url: 'http://localhost:5000/tasks/' + taskID,
+        type: 'GET'
+    })
+        .done(function (data) {
+            showModal(taskID, data.task.task);
+        })
+        .fail(function (jqXHR, textStatus) {
+            alert("cannot get Task : "+taskID+" ->\n" + textStatus + "  " + jqXHR)
+        });
+};
+
+var showModal = function(taskID,task) {
+    var modal = $('#showModal').modal()
+    modal.find('.modal-title').text("Task #"+taskID);
+    modal.find('.modal-body').text(task);
+};
+
 var openModal = function(taskID, task) {
 
     var modal = $('#editModal').modal();
@@ -122,13 +151,11 @@ var openModal = function(taskID, task) {
     modal.find('#editTask').val(task)
     modal.show();
 
-}
+};
 
 var closeModal = function() {
-
     var modal = $('#editModal').modal('toggle');
-
-}
+};
 
 
 
