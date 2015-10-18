@@ -4,17 +4,54 @@
     <meta charset="UTF-8">
     <title></title>
 
-    <script rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"></script>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
 
 
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/underscore/underscore-min.js"></script>
-    <script src="node_modules/handlebars/dist/handlebars.min.js"></script>
     <script src="node_modules/backbone/backbone-min.js"></script>
-
 
 </head>
 <body>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <table class="table table-striped col-xs-12">
+            <thead>
+            <tr>
+                <th class="col-xs-3 col-sm-2">ID</th>
+                <th class="col-xs-3 col-sm-4">Task Description</th>
+            </tr>
+            </thead>
+            <tbody id="task_container">
+            </tbody>
+            <tfoot>
+            <tr>
+                <td><input type="number" id=inputID class="form-control" placeholder="ID"></td>
+                <td><input type="text" id="task" class="form-control" placeholder="New Task Description"></td>
+                <td><input type="submit" id="add" class="btn btn-success form-control" value="Add"></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+
+<script src="js/main.js"></script>
+<script type="text/template" class="template" id="task_view_template">
+    <tr>
+        <td><%= id%></td>
+        <td><%= task%></td>
+        <td>
+            <button class='btn btn-warning form-control col-xs-6'>Edit</button>
+        </td>
+        <td>
+            <button class='btn btn-danger form-control col-xs-6'>Delete</button>
+        </td>
+    </tr>
+</script>
+
 
 </body>
 </html>
