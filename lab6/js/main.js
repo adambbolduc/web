@@ -1,13 +1,6 @@
 $(function () {
     $(document).ready(function () {
 
-        var Router = Backbone.Router.extend({
-            routes: {
-                "": "home",
-                "tasks": "tasks"
-            }
-        });
-
         var TaskModel = Backbone.Model.extend({
             urlRoot: "http://localhost:5000/tasks"
         });
